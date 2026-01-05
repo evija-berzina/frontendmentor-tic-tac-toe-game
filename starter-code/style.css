@@ -1,0 +1,411 @@
+/* --------------------------- */
+/* Custom properties           */
+/* --------------------------- */
+
+:root {
+  /* colors */
+  --clr-dark-green: 202 32% 15%;
+  --clr-light-green: 199 35% 19%;
+  --clr-dark-grey: 198 23% 72%;
+  --clr-light-grey: 197 33% 89%;
+  --clr-dark-blue: 178 60% 48%;
+  --clr-light-blue: 178 75% 65%;
+  --clr-dark-yellow: 39 88% 58%;
+  --clr-light-yellow: 39 100% 69%;
+
+  /* font-sizes */
+  --fs-large: 2.5rem;
+  --fs-medium: 1.5rem;
+  --fs-small: 1.25rem;
+  --fs-xsmall: 1rem;
+  --fs-body: 0.875rem;
+
+  /* font-families */
+  --ff-outfit: "Outfit", sans-serif;
+
+  /* font-weight */
+  --fw-500: 500;
+  --fw-700: 700;
+}
+
+/* --------------------------- */
+/* Font                        */
+/* --------------------------- */
+
+@font-face {
+  font-display: swap;
+  font-family: 'Outfit';
+  font-weight: 500;
+  src: url('./assets/fonts/static/Outfit-Medium.ttf');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Outfit';
+  font-weight: 700;
+  src: url('./assets/fonts/static/Outfit-Bold.ttf') format('ttf');
+}
+
+/* --------------------------- */
+/* Reset                       */
+/* --------------------------- */
+
+/* https://piccalil.li/blog/a-modern-css-reset/ */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* outline: 1px solid red; */
+}
+
+/* Reset margins */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: var(--fw-500);
+}
+
+/* set up the body */
+body {
+  font-family: var(--ff-outfit);
+  font-size: var(--fs-body);
+  color: hsl(var(--clr-dark-grey));
+  background-color: hsl( var(--clr-dark-green) );
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  /* min-height: 100vh;
+
+  display: grid;
+  grid-template-rows: 1fr; */
+}
+
+/* make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* make form elements easier to work with */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* remove animations for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------- */
+/* Utility classes              */
+/* --------------------------- */
+
+.flex {
+  display: flex;
+  gap: var(--gap, 1rem);
+}
+
+.grid {
+  display: grid;
+  gap: var(--gap, 1rem);
+}
+
+.d-block {
+  display: block;
+}
+
+.flow > *:where(:not(:first-child)) {
+  margin-top: var(--flow-space, 1rem);
+}
+
+.flow--space-small {
+  --flow-space: 1rem;
+}
+
+.container {
+  padding-inline: 2em;
+  margin-inline: auto;
+  max-width: 80rem;
+}
+
+/* screen reader only - izmanto ekrana teksta lasītājam - is stays in DOM but visually it is complitely gone - none izņmem pavisam no lapas*/
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* added line */
+  border: 0;
+}
+
+.skip-to-content {
+  position: absolute;
+  z-index: 9999;
+  background: hsl( var(--clr-white) );
+  color: hsl( var(--clr-dark) );
+  padding: .5em 1em;
+  margin-inline: auto;
+  transform: translateY(-100%);
+  transition: transform 250ms ease-in;
+}
+
+.skip-to-content:focus {
+  transform: translateY(0);
+}
+
+.box {
+  background-color: lightblue;
+  padding: 3rem;
+}
+
+/* colors */
+
+.bg-dark {
+  background-color: hsl( var(--clr-dark) );
+}
+
+.bg-light {
+  background-color: hsl( var(--clr-light) );
+}
+
+.bg-white {
+  background-color: hsl( var(--clr-white) );
+}
+
+.bg-light-alpha {
+  background-color: hsl( var(--clr-light-alpha) );
+}
+
+.text-white {
+  color: hsl( var(--clr-white) );
+}
+
+.text-light {
+  color: hsl( var(--clr-light) );
+}
+
+.text-dark {
+  color: hsl( var(--clr-dark) );
+}
+
+/* typography */
+
+.letter-spacing-1 { letter-spacing: 0.8px; } 
+.letter-spacing-2 { letter-spacing: 1px; } 
+.letter-spacing-3 { letter-spacing: 1.25px; }
+.letter-spacing-4 { letter-spacing: 1.5px; } 
+.letter-spacing-5 { letter-spacing: 2.5px; }
+
+.uppercase { text-transform: uppercase; }
+
+.fs-900 { font-size: var(--fs-900); }
+.fs-800 { font-size: var(--fs-800); }
+.fs-700 { font-size: var(--fs-700); }
+.fs-600 { font-size: var(--fs-600); }
+.fs-500 { font-size: var(--fs-500); }
+.fs-400 { font-size: var(--fs-400); }
+.fs-300 { font-size: var(--fs-300); }
+.fs-200 { font-size: var(--fs-200); }
+
+.fs-900,
+.fs-800,
+.fs-700,
+.fs-600 {
+    line-height: 1.1;
+}
+
+/* --------------------------- */
+/* Compontents                 */
+/* --------------------------- */
+
+.btn1 {
+  background-color: hsl(var(--clr-dark-yellow));
+  padding-block: .75rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  color: hsl( var(--clr-dark-green));
+  width: 100%;
+  box-shadow: 0 6px 1px hsl(39, 88%, 43%);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+.btn1:hover {
+  background-color: hsl(var(--clr-light-yellow));
+}
+
+.btn2 {
+  background-color: hsl(var(--clr-dark-blue));
+  padding-block: .75rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  width: 100%;
+  color: hsl( var(--clr-dark-green));
+  box-shadow: 0 6px 1px hsl(178, 60%, 32%);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+.btn2:hover {
+  background-color: hsl(var(--clr-light-blue));
+}
+
+.s-btn1 {
+  background-color: hsl(var(--clr-dark-yellow));
+  padding-inline: 1rem;
+  padding-block: .75rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  color: hsl( var(--clr-dark-green));
+  box-shadow: 0 3px 1px hsl(39, 88%, 43%);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+.s-btn1:hover {
+  background-color: hsl(var(--clr-light-yellow));
+}
+
+.s-btn2 {
+  background-color: hsl(var(--clr-dark-grey));
+  padding-inline: 1rem;
+  padding-block: .75rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  color: hsl( var(--clr-dark-green));
+  box-shadow: 0 3px 1px hsl(198, 23%, 48%);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+.s-btn2:hover {
+  background-color: hsl(var(--clr-light-grey));
+}
+
+.reset-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(var(--clr-dark-grey));
+  padding: .75rem;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 3px 1px hsl(198, 23%, 48%);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+.reset-btn:hover {
+  background-color: hsl(var(--clr-light-grey));
+}
+
+.reset-icon {
+  fill: hsl(var(--clr-dark-green));
+}
+
+.new-game-menu {
+  flex-direction: column;
+  padding-inline: 1.5rem;
+  padding-block: 6rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon-x {
+  fill: hsl(var(--clr-dark-blue));
+}
+
+.logo-icon-o {
+  fill: hsl(var(--clr-dark-yellow));
+}
+
+.player-choice {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-inline: 1.5rem;
+  padding-block: 1.5rem;
+  background-color: hsl(var(--clr-light-green));
+  border-radius: 10px;
+}
+
+
+.player-choice > .mark-container {
+  background-color:  hsl(var(--clr-dark-green));
+  width: 100%;
+  padding: .5rem;
+  border-radius: 10px;
+  gap:0;
+}
+
+.mark-btn-on {
+  background-color:  hsl(var(--clr-dark-grey));
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  padding-block: .75rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.mark-btn-off {
+  background-color:  hsl(var(--clr-dark-green));
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  padding-block: .75rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.mark-icon-on {
+  fill: hsl(var(--clr-dark-green));
+  width: 32px;
+  height: 32px;
+}
+
+.mark-icon-off {
+  fill: hsl(var(--clr-dark-grey));
+  width: 32px;
+  height: 32px;
+}
+
