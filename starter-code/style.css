@@ -192,28 +192,16 @@ select {
 
 /* colors */
 
-.bg-dark {
-  background-color: hsl( var(--clr-dark) );
+.bg-blue {
+  background-color: hsl(var(--clr-dark-blue));
 }
 
-.bg-light {
-  background-color: hsl( var(--clr-light) );
+.bg-grey {
+  background-color: hsl(var(--clr-dark-grey));
 }
 
-.bg-white {
-  background-color: hsl( var(--clr-white) );
-}
-
-.bg-light-alpha {
-  background-color: hsl( var(--clr-light-alpha) );
-}
-
-.text-white {
-  color: hsl( var(--clr-white) );
-}
-
-.text-light {
-  color: hsl( var(--clr-light) );
+.bg-yellow {
+  background-color: hsl(var(--clr-dark-yellow));
 }
 
 .text-dark {
@@ -244,6 +232,10 @@ select {
 .fs-700,
 .fs-600 {
     line-height: 1.1;
+}
+
+.fw-700 {
+  font-weight: var(--fw-700);
 }
 
 /* --------------------------- */
@@ -318,14 +310,19 @@ select {
   background-color: hsl(var(--clr-light-grey));
 }
 
+.game-board > .reset-btn {
+  justify-self: end;
+}
+
 .reset-btn {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: hsl(var(--clr-dark-grey));
   padding: .75rem;
+  width: 2.5rem;
   aspect-ratio: 1;
-  border-radius: 10px;
+  border-radius: 6px;
   border: none;
   box-shadow: 0 3px 1px hsl(198, 23%, 48%);
   cursor: pointer;
@@ -377,7 +374,7 @@ select {
   gap:0;
 }
 
-.mark-btn-on {
+.mark-container > [aria-selected="true"] {
   background-color:  hsl(var(--clr-dark-grey));
   border: none;
   border-radius: 10px;
@@ -387,7 +384,7 @@ select {
   align-items: center;
 }
 
-.mark-btn-off {
+.mark-btn {
   background-color:  hsl(var(--clr-dark-green));
   border: none;
   border-radius: 10px;
@@ -397,15 +394,58 @@ select {
   align-items: center;
 }
 
-.mark-icon-on {
+.mark-container > [aria-selected="true"] .mark-icon {
   fill: hsl(var(--clr-dark-green));
   width: 32px;
   height: 32px;
 }
 
-.mark-icon-off {
+.mark-icon {
   fill: hsl(var(--clr-dark-grey));
   width: 32px;
   height: 32px;
 }
 
+.game-board-section {
+  padding: 1.5rem 1.5rem 9rem 1.5rem;
+}
+
+.game-board-header {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.game-board-block {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background-color: hsl(var(--clr-light-green));
+
+}
+
+.game-board-footer {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.player1,
+.ties,
+.player2 {
+  color: hsl(var(--clr-dark-green));
+  text-align: center;
+  border-radius: 10px;
+  padding-block: .5rem;
+}
+
+.score {
+  font-weight: var(--fw-700);
+  font-size: var(--fs-small);
+}
