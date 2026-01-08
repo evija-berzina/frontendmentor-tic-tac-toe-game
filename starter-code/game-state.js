@@ -1,10 +1,10 @@
 export const state = {
   players: {
-    player1: '',
-    player2: '',
+    player1: 'x', //ieliec saiti
+    player2: 'o',
   },
   gameMode: '',
-  turn: '',
+  turn: 'x',
   cells: ['', '', '', '', '', '', '', '', ''],
   score: {
     player1Score: 0,
