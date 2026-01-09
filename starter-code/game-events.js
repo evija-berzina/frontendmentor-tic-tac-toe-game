@@ -56,8 +56,11 @@ export function chooseGameBlock () {
   const whosTurn = document.querySelector('.whos-turn');
     const scoreMe = document.querySelector('.score-me');
     const scorePlayer = document.querySelector('.score-player');
+    const scoreTie = document.querySelector('.score-tie');
+
+    
   gameBlock.forEach(block => {
-    const cell = block.dataset.cell;
+    const cell = parseFloat(block.dataset.cell);
     
      whosTurn.innerHTML = state.turn;
     block.addEventListener('click', () => {
@@ -67,22 +70,27 @@ export function chooseGameBlock () {
         // state.cells[cell] = block;
         
         if (state.turn === state.players.player1) {
+          const player1 = state.players.player1;
           state.cells[cell] = state.players.player1;
           block.innerHTML = state.players.player1;
+          if (checkWinner(player1) === true) {
+            setScore(state.score, 'player1Score', scoreMe);
+          } 
           state.turn = state.players.player2;
-           whosTurn.innerHTML = state.turn;
+          whosTurn.innerHTML = state.turn;
         } else {
+          const player2 = state.players.player2;
           state.cells[cell] = state.players.player2;
           block.innerHTML = state.players.player2;
+          if (checkWinner(player2) === true) {
+            setScore (state.score, 'player2Score', scorePlayer);
+          }
           state.turn = state.players.player1;
-           whosTurn.innerHTML = state.turn;
+          whosTurn.innerHTML = state.turn;
         }
 
-        if (state.cells[0] === state.players.player1 && state.cells[1] === state.players.player1 && state.cells[2] === state.players.player1) {
-          state.score.player1Score += 1;
-          scoreMe.innerHTML = state.score.player1Score;
-          
-        }
+        
+        
         
         console.log(state.cells)
       } else {
@@ -94,4 +102,21 @@ export function chooseGameBlock () {
   });
 
   
+}
+
+function checkWinner (player) {
+  const winnings = [
+    [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]
+  ];
+
+  for (const w of winnings) {
+    if ((state.cells[w[0]] === player && state.cells[w[1]] === player && state.cells[w[2]] === player) && (state.cells[w[0]] !== '' && state.cells[w[1]] !== '' && state.cells[w[2]] !== '')) {
+      return true;
+    } 
+  }  
+}
+
+function setScore (score, key, elementForCode) {
+    score[key] += 1;
+    elementForCode.innerHTML = score[key];
 }
