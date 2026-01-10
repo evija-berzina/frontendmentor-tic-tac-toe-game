@@ -57,12 +57,11 @@ export function chooseGameBlock () {
     const scoreMe = document.querySelector('.score-me');
     const scorePlayer = document.querySelector('.score-player');
     const scoreTie = document.querySelector('.score-tie');
-
     
   gameBlock.forEach(block => {
     const cell = parseFloat(block.dataset.cell);
     
-     whosTurn.innerHTML = state.turn;
+    whosTurn.innerHTML = state.turn;
     block.addEventListener('click', () => {
      console.log(block);
       console.log(state.turn)
@@ -73,35 +72,31 @@ export function chooseGameBlock () {
           const player1 = state.players.player1;
           state.cells[cell] = state.players.player1;
           block.innerHTML = state.players.player1;
-          if (checkWinner(player1) === true) {
+          if (checkWinner(player1)) {
             setScore(state.score, 'player1Score', scoreMe);
-          } 
+          } else if (checkTie()) {
+            setScore(state.score, 'ties', scoreTie);
+          }
           state.turn = state.players.player2;
           whosTurn.innerHTML = state.turn;
         } else {
           const player2 = state.players.player2;
           state.cells[cell] = state.players.player2;
           block.innerHTML = state.players.player2;
-          if (checkWinner(player2) === true) {
+          if (checkWinner(player2)) {
             setScore (state.score, 'player2Score', scorePlayer);
+          } else if (checkTie()) {
+            setScore(state.score, 'ties', scoreTie);
           }
           state.turn = state.players.player1;
           whosTurn.innerHTML = state.turn;
         }
-
-        
-        
-        
         console.log(state.cells)
       } else {
-        return;
-      } 
-    });
-    
-    
-  });
-
-  
+        return
+      }
+    }) 
+  })
 }
 
 function checkWinner (player) {
@@ -112,8 +107,18 @@ function checkWinner (player) {
   for (const w of winnings) {
     if ((state.cells[w[0]] === player && state.cells[w[1]] === player && state.cells[w[2]] === player) && (state.cells[w[0]] !== '' && state.cells[w[1]] !== '' && state.cells[w[2]] !== '')) {
       return true;
-    } 
-  }  
+    };
+  };
+  return false; 
+}
+
+function checkTie () {
+  for (let i = 0; i < state.cells.length; i++) {
+    if (state.cells[i] === '') {
+      return false;
+    };
+  };
+  return true;
 }
 
 function setScore (score, key, elementForCode) {
