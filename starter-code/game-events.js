@@ -52,18 +52,23 @@ export function gameStart () {
 
 // spēles cikla sākums
 export function chooseGameBlock () {
+  const gameBoardSection = document.querySelector('.game-board-section');
+  const gameBoard = document.querySelectorAll('.game-board');
   const gameBlock = document.querySelectorAll('.game-board-block');
   const whosTurn = document.querySelector('.whos-turn');
     const scoreMe = document.querySelector('.score-me');
     const scorePlayer = document.querySelector('.score-player');
     const scoreTie = document.querySelector('.score-tie');
     
+    
   gameBlock.forEach(block => {
     const cell = parseFloat(block.dataset.cell);
     
     whosTurn.innerHTML = state.turn;
     block.addEventListener('click', () => {
-     console.log(block);
+      if (state.gameOver) return;
+
+      console.log(block);
       console.log(state.turn)
       if (state.cells[cell] === '') {
         // state.cells[cell] = block;
@@ -74,8 +79,13 @@ export function chooseGameBlock () {
           block.innerHTML = state.players.player1;
           if (checkWinner(player1)) {
             setScore(state.score, 'player1Score', scoreMe);
+            state.gameOver = true;
+            // showOverlay('win', player1);
+            setTimeout(showOverlay, 1000);
           } else if (checkTie()) {
             setScore(state.score, 'ties', scoreTie);
+            state.gameOver = true;
+            // showOverlay('tie');
           }
           state.turn = state.players.player2;
           whosTurn.innerHTML = state.turn;
@@ -85,8 +95,10 @@ export function chooseGameBlock () {
           block.innerHTML = state.players.player2;
           if (checkWinner(player2)) {
             setScore (state.score, 'player2Score', scorePlayer);
+            state.gameOver = true;
           } else if (checkTie()) {
             setScore(state.score, 'ties', scoreTie);
+            state.gameOver = true;
           }
           state.turn = state.players.player1;
           whosTurn.innerHTML = state.turn;
@@ -124,4 +136,24 @@ function checkTie () {
 function setScore (score, key, elementForCode) {
     score[key] += 1;
     elementForCode.innerHTML = score[key];
+}
+
+function showOverlay() {
+  const overlaySection = document.querySelector('.overlay-container');
+  overlaySection.hidden = false;
+}
+
+export function quitGame () {
+  const quitBtn = document.querySelector('.quit-js-btn');
+  const overlaySection = document.querySelector('.overlay-container');
+  const newGameMenu = document.querySelector('.new-game-js');
+  const gameBoard = document.querySelector('.game-board-js');
+
+  quitBtn.addEventListener('click', () => {
+    newGameMenu.hidden = false;
+    gameBoard.hidden = true;
+    overlaySection.hidden = true;
+    const stateCopy = structuredClone(state);
+    setupPlayerMark();
+  })
 }

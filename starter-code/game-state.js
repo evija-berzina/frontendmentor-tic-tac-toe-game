@@ -6,6 +6,7 @@ export const state = {
   gameMode: '',
   turn: 'x',
   cells: ['', '', '', '', '', '', '', '', ''],
+  gameOver: false,
   score: {
     player1Score: 0,
     player2Score: 0,
