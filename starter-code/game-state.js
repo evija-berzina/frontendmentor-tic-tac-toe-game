@@ -1,10 +1,10 @@
-export const state = {
+export const initialState = {
   players: {
-    player1: 'x', //ieliec saiti
-    player2: 'o',
+    player1: './assets/icon-x.svg', //ieliec saiti
+    player2: './assets/icon-o.svg',
   },
   gameMode: '',
-  turn: 'x',
+  turn: './assets/icon-x.svg',
   cells: ['', '', '', '', '', '', '', '', ''],
   gameOver: false,
   score: {
