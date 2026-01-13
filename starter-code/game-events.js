@@ -80,10 +80,11 @@ export function chooseGameBlock () {
             setScore(state.score, 'player1Score', scoreMe);
             state.gameOver = true;
             // showOverlay('win', player1);
-            setTimeout(() => showOverlay(player1), 1000);
+            setTimeout(() => showOverlay('win', player1), 1000);
           } else if (checkTie()) {
             setScore(state.score, 'ties', scoreTie);
             state.gameOver = true;
+            setTimeout(() => showOverlay('tie'), 1000);
             // showOverlay('tie');
           }
           state.turn = state.players.player2;
@@ -95,10 +96,11 @@ export function chooseGameBlock () {
           if (checkWinner(player2)) {
             setScore (state.score, 'player2Score', scorePlayer);
             state.gameOver = true;
-            setTimeout(() => showOverlay(player2), 1000);
+            setTimeout(() => showOverlay('win', player2), 1000);
           } else if (checkTie()) {
             setScore(state.score, 'ties', scoreTie);
             state.gameOver = true;
+            setTimeout(() => showOverlay('tie'), 1000);
           }
           state.turn = state.players.player1;
           whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
@@ -138,28 +140,57 @@ function setScore (score, key, elementForCode) {
     elementForCode.innerHTML = score[key];
 }
 
-function showOverlay(player) {
+function showOverlay(position, player) {
   const overlaySection = document.querySelector('.overlay-container');
   const whoWon = document.querySelector('.who-won-info');
   const takesTheRound = document.querySelector('.takes-round-msg');
+  const greyBtn = document.querySelector('.quit-js-btn');
+  const yellowBtn = document.querySelector('.next-round-btn');
 
+  // overlay default stāvoklis
   overlaySection.hidden = false;
-  if(state.players.player1 === player) {
-    whoWon.innerHTML = 'You won!';
-  } else {
-    whoWon.innerHTML = 'Oh no, you lost...';
-  } 
-  
+  whoWon.hidden = false;
+  whoWon.textContent = '';
 
+  takesTheRound.textContent = '';
+
+  greyBtn.textContent = '';
+  yellowBtn.textContent = '';
+
+  //viens aktīvais režīms
+  if(position === 'win') {
+    takesTheRound.textContent = 'takes the round';
+    greyBtn.textContent = 'quit';
+    greyBtn.dataset.action = 'quit';
+    yellowBtn.textContent = 'next round';
+    yellowBtn.dataset.action = 'nextRound';
+
+    if (state.players.player1 === player) {
+      whoWon.textContent = 'You won!';
+    } else {
+      whoWon.textContent = 'Oh no, you lost...';
+    }
+  } else if(position === 'tie') {
+    whoWon.hidden = true;
+    takesTheRound.textContent = 'Round tied';
+    greyBtn.textContent = 'quit';
+    yellowBtn.textContent = 'next round';
+  } else if(position === 'reset') {
+    whoWon.hidden = true;
+    takesTheRound.textContent = 'Restart game?';
+    greyBtn.textContent = 'no, cancel';
+    greyBtn.dataset.action = 'cancel';
+    yellowBtn.textContent = 'yes, restart'
+    yellowBtn.dataset.action = 'restart';
+  }
 }
 
-export function quitGame () {
+export function quitGame() {
   const quitBtn = document.querySelector('.quit-js-btn');
   const overlaySection = document.querySelector('.overlay-container');
   const newGameMenu = document.querySelector('.new-game-js');
   const gameBoard = document.querySelector('.game-board-js');
 
-  quitBtn.addEventListener('click', () => {
     resetState();
     resetBoardUI();
     newGameMenu.hidden = false;
@@ -168,7 +199,6 @@ export function quitGame () {
     // console.log(initialState)
     // console.log(state)
     
-  })
 }
 
 function resetState() {
@@ -191,4 +221,72 @@ function resetBoardUI() {
   scoreMe.innerHTML = state.score.player1Score;
   scorePlayer.innerHTML = state.score.player2Score;
   scoreTie.innerHTML = state.score.ties;
+}
+
+export function nextRound() {
+  const nextRoundBtn = document.querySelector('.next-round-btn');
+   const gameBlock = document.querySelectorAll('.game-board-block');
+  const whosTurn = document.querySelector('.whos-turn');
+  const overlaySection = document.querySelector('.overlay-container');
+
+ 
+    const newState = structuredClone(initialState);
+  const newCells = Object.assign(state.cells, newState.cells);
+    state.turn = initialState.turn;
+    state.gameOver = false;
+    whosTurn.innerHTML = `<img src="${state.turn}">`;
+    gameBlock.forEach((block, i) => {
+    block.innerHTML = newState.cells[i];
+  });
+    overlaySection.hidden = true;
+  
+}
+
+export function reset() {
+  const resetBtn = document.querySelector('.reset-btn-js');
+
+  resetBtn.addEventListener('click', () => {
+    showOverlay('reset');
+  })
+}
+
+function resetGame() {
+const gameBlock = document.querySelectorAll('.game-board-block');
+  const whosTurn = document.querySelector('.whos-turn');
+  const overlaySection = document.querySelector('.overlay-container');
+
+  const newState = structuredClone(initialState);
+  Object.assign(state.cells, newState.cells);
+    state.turn = initialState.turn;
+    whosTurn.innerHTML = `<img src="${state.turn}">`;
+    gameBlock.forEach((block, i) => {
+      block.innerHTML = newState.cells[i];
+    });
+    overlaySection.hidden = true;
+}
+
+export function setupOverlayButtons() {
+  const overlaySection = document.querySelector('.overlay-container');
+  const greyBtn = document.querySelector('.quit-js-btn');
+  const yellowBtn = document.querySelector('.next-round-btn');
+
+  greyBtn.addEventListener('click', () => {
+    const action = greyBtn.dataset.action;
+
+    if(action === 'quit') {
+      quitGame();
+    } else if(action === 'cancel') {
+      overlaySection.hidden = true;
+    }
+  });
+
+  yellowBtn.addEventListener('click', () => {
+    const action = yellowBtn.dataset.action;
+
+    if(action === 'nextRound') {
+      nextRound();
+    } else if(action === 'restart') {
+      resetGame();
+    }
+  });
 }
