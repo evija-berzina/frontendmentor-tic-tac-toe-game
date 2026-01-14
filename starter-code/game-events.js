@@ -60,55 +60,107 @@ export function chooseGameBlock () {
     const scorePlayer = document.querySelector('.score-player');
     const scoreTie = document.querySelector('.score-tie');
     
+    scoreMe.textContent = state.score.player1Score;
+    scorePlayer.textContent = state.score.player2Score;
+    scoreTie.textContent = state.score.ties;
+
   gameBlock.forEach(block => {
-    const cell = parseFloat(block.dataset.cell);
+    let cell = parseFloat(block.dataset.cell);
     
     whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`
     block.addEventListener('click', () => {
       if (state.gameOver) return;
 
-      console.log(block);
-      console.log(state.turn)
-      if (state.cells[cell] === '') {
-        // state.cells[cell] = block;
+      if(state.gameMode === 'cpu') {
+
+        if (state.cells[cell] !== '' || state.gameOver) return;
         
-        if (state.turn === state.players.player1) {
           const player1 = state.players.player1;
           state.cells[cell] = state.players.player1;
-          block.innerHTML = `<img src="${state.players.player1}" alt="X">`;
+          block.innerHTML = `<img src="${player1}" alt="X">`;
           if (checkWinner(player1)) {
             setScore(state.score, 'player1Score', scoreMe);
             state.gameOver = true;
-            // showOverlay('win', player1);
             setTimeout(() => showOverlay('win', player1), 1000);
-          } else if (checkTie()) {
+            return;
+          }
+          if (checkTie()) {
             setScore(state.score, 'ties', scoreTie);
             state.gameOver = true;
             setTimeout(() => showOverlay('tie'), 1000);
-            // showOverlay('tie');
+            return;
           }
+
           state.turn = state.players.player2;
           whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
-        } else {
+      
+          //CPU gājiens
+          const cpuCell = cpuMove();
+          if(cpuCell === null) return;
+
           const player2 = state.players.player2;
-          state.cells[cell] = state.players.player2;
-          block.innerHTML = `<img src="${state.players.player2}" alt="X">`;
+          state.cells[cpuCell] = player2;
+          gameBlock[cpuCell].innerHTML = `<img src="${player2}" alt="X">`;  
+          
           if (checkWinner(player2)) {
             setScore (state.score, 'player2Score', scorePlayer);
             state.gameOver = true;
             setTimeout(() => showOverlay('win', player2), 1000);
-          } else if (checkTie()) {
+            return;
+          }
+          if (checkTie()) {
             setScore(state.score, 'ties', scoreTie);
             state.gameOver = true;
             setTimeout(() => showOverlay('tie'), 1000);
           }
           state.turn = state.players.player1;
           whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
-        }
+        
+        
+      } else if (state.gameMode === 'player') {
+        if (state.cells[cell] === '') {
+        // state.cells[cell] = block;
+        
+          if (state.turn === state.players.player1) {
+            const player1 = state.players.player1;
+            state.cells[cell] = state.players.player1;
+            block.innerHTML = `<img src="${state.players.player1}" alt="X">`;
+            if (checkWinner(player1)) {
+              setScore(state.score, 'player1Score', scoreMe);
+              state.gameOver = true;
+              // showOverlay('win', player1);
+              setTimeout(() => showOverlay('win', player1), 1000);
+            } else if (checkTie()) {
+              setScore(state.score, 'ties', scoreTie);
+              state.gameOver = true;
+              setTimeout(() => showOverlay('tie'), 1000);
+              // showOverlay('tie');
+            }
+            state.turn = state.players.player2;
+            whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+          } else {
+            const player2 = state.players.player2;
+            state.cells[cell] = state.players.player2;
+            block.innerHTML = `<img src="${state.players.player2}" alt="X">`;
+            if (checkWinner(player2)) {
+              setScore (state.score, 'player2Score', scorePlayer);
+              state.gameOver = true;
+              setTimeout(() => showOverlay('win', player2), 1000);
+            } else if (checkTie()) {
+              setScore(state.score, 'ties', scoreTie);
+              state.gameOver = true;
+              setTimeout(() => showOverlay('tie'), 1000);
+            }
+            state.turn = state.players.player1;
+            whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+          }
         console.log(state.cells)
-      } else {
-        return
+        } else {
+          return
+        }
       }
+
+      
     }) 
   })
 }
@@ -289,4 +341,19 @@ export function setupOverlayButtons() {
       resetGame();
     }
   });
+}
+
+export function cpuMove() {
+  const emptyCells = [];
+  
+  for (let i = 0; i < state.cells.length; i++) {
+    if (state.cells[i] === '') {
+      emptyCells.push(i);
+    }
+  }
+
+  if (emptyCells.length === 0) return null;
+
+  const randomIndex = Math.floor(Math.random() * emptyCells.length);
+  return emptyCells[randomIndex];
 }
