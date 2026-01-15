@@ -74,7 +74,8 @@ export function chooseGameBlock () {
       if(state.gameMode === 'cpu') {
 
         if (state.cells[cell] !== '' || state.gameOver) return;
-        
+        console.log(state.turn)
+        if (state.turn) {
           const player1 = state.players.player1;
           state.cells[cell] = state.players.player1;
           block.innerHTML = `<img src="${player1}" alt="X">`;
@@ -88,19 +89,19 @@ export function chooseGameBlock () {
             setScore(state.score, 'ties', scoreTie);
             state.gameOver = true;
             setTimeout(() => showOverlay('tie'), 1000);
-            return;
           }
-
           state.turn = state.players.player2;
           whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
-      
-          //CPU gājiens
+        }
+
+        if (state.turn) {
           const cpuCell = cpuMove();
+          console.log('CPU move:', cpuCell);
           if(cpuCell === null) return;
 
           const player2 = state.players.player2;
           state.cells[cpuCell] = player2;
-          gameBlock[cpuCell].innerHTML = `<img src="${player2}" alt="X">`;  
+          setTimeout(() => gameBlock[cpuCell].innerHTML = `<img src="${player2}" alt="X">`, 1000); 
           
           if (checkWinner(player2)) {
             setScore (state.score, 'player2Score', scorePlayer);
@@ -115,6 +116,11 @@ export function chooseGameBlock () {
           }
           state.turn = state.players.player1;
           whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+        }
+        
+        
+      
+          
         
         
       } else if (state.gameMode === 'player') {
@@ -345,14 +351,39 @@ export function setupOverlayButtons() {
 
 export function cpuMove() {
   const emptyCells = [];
+  const winnings = [
+    [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]
+  ];
   
   for (let i = 0; i < state.cells.length; i++) {
     if (state.cells[i] === '') {
       emptyCells.push(i);
     }
   }
+  //console.log(emptyCells)
 
   if (emptyCells.length === 0) return null;
+
+  for (const w of winnings) {
+    if (state.cells[w[0]] === state.players.player2 && state.cells[w[1]] === state.players.player2 && state.cells[w[2]] === '') {
+      return w[2];
+    } else if (state.cells[w[0]] === state.players.player2 && state.cells[w[1]] === '' && state.cells[w[2]] === state.players.player2) {
+      return w[1];
+    } else if (state.cells[w[0]] === '' && state.cells[w[1]] === state.players.player2 && state.cells[w[2]] === state.players.player2) {
+      return w[0];
+    } 
+    //console.log(w[0])
+  };
+
+  for (const w of winnings) {
+    if (state.cells[w[0]] === state.players.player1 && state.cells[w[1]] === state.players.player1 && state.cells[w[2]] === '') {
+      return w[2];
+    } else if (state.cells[w[0]] === state.players.player1 && state.cells[w[1]] === '' && state.cells[w[2]] === state.players.player1) {
+      return w[1];
+    } else if (state.cells[w[0]] === '' && state.cells[w[1]] === state.players.player1 && state.cells[w[2]] === state.players.player1) {
+      return w[0];
+    } 
+  };
 
   const randomIndex = Math.floor(Math.random() * emptyCells.length);
   return emptyCells[randomIndex];
