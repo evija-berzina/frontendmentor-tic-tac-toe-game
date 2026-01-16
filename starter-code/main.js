@@ -1,8 +1,9 @@
-import {setupPlayerMark, setupGameMode, chooseGameBlock, gameStart, reset, setupOverlayButtons} from './game-events.js';
+import {setupPlayerMark, setupGameMode, chooseGameBlock, reset, setupOverlayButtons} from './game-events.js';
 
 setupPlayerMark();
 setupGameMode();
-gameStart();
+// gameStart();
+// isCpuFirst();
 chooseGameBlock();
 reset();
 setupOverlayButtons();
