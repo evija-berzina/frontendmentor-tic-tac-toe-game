@@ -1,4 +1,6 @@
 import {initialState} from './game-state.js';
+import { ICON_X, ICON_O } from './icons.js';
+
 export const state = structuredClone(initialState);
 // speles iestatījumu izvēle
 export function setupPlayerMark () {
@@ -7,12 +9,12 @@ export function setupPlayerMark () {
   markBtn.forEach(button => { 
     button.addEventListener('click', () => {  
       const mark = button.dataset.mark;
-      state.players.player1 = mark === 'x' ? './assets/icon-x.svg' : './assets/icon-o.svg';
-      state.players.player2 = mark === 'x' ? './assets/icon-o.svg' : './assets/icon-x.svg';
+      state.players.player1 = mark === 'x' ? ICON_X : ICON_O;
+      state.players.player2 = mark === 'x' ? ICON_O : ICON_X;
       console.log(mark)
       
 
-      state.turn = state.players.player1 === './assets/icon-x.svg'
+      state.turn = state.players.player1 === ICON_X
   ? state.players.player1
   : state.players.player2;
 
@@ -36,6 +38,9 @@ export function setupGameMode () {
   const newGameBtn = document.querySelectorAll('.new-game-btn');
   const newGameMenu = document.querySelector('.new-game-js');
   const gameBoard = document.querySelector('.game-board-js');
+  const whosTurn = document.querySelector('.whos-turn');
+  const playerX = document.querySelector('.player-x');
+  const playerO = document.querySelector('.player-o');
 
   newGameBtn.forEach(button => {
     button.addEventListener('click', () => {
@@ -45,8 +50,28 @@ export function setupGameMode () {
       gameBoard.hidden = false;
 
       if(state.gameMode === 'cpu' && state.turn === state.players.player2) {
-    setTimeout(cpuMoveHandler, 500);
-}
+        setTimeout(cpuMoveHandler, 1000);
+      }
+
+      whosTurn.innerHTML = state.turn;
+
+      if(state.gameMode === 'cpu') {
+        if (state.players.player1 === ICON_X) {
+          playerX.textContent = '(YOU)';
+          playerO.textContent = '(CPU)';
+        } else {
+          playerX.textContent = '(CPU)';
+          playerO.textContent = '(YOU)';
+        }
+      } else if (state.gameMode === 'player') {
+        if (state.players.player1 === ICON_X) {
+          playerX.textContent = '(P1)';
+          playerO.textContent = '(P2)';
+        } else {
+          playerX.textContent = '(P2)';
+          playerO.textContent = '(P1)';
+        }
+      }
     });
   });
 }
@@ -73,7 +98,7 @@ export function chooseGameBlock () {
         if (state.cells[cell] !== '' || state.gameOver) return;
 
         state.cells[cell] = state.players.player1;
-        block.innerHTML = `<img src="${state.players.player1}" alt="X">`;
+        block.innerHTML = state.players.player1;
 
         if (checkWinner(state.players.player1)) {
           setScore(state.score, 'player1Score', scoreMe);
@@ -90,7 +115,7 @@ export function chooseGameBlock () {
         }
 
         state.turn = state.players.player2;
-        whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+        whosTurn.innerHTML = state.turn;
 
         if(state.gameMode === 'cpu') {
           setTimeout(cpuMoveHandler, 500);
@@ -104,7 +129,7 @@ export function chooseGameBlock () {
             if (state.turn === state.players.player1) {
               const player1 = state.players.player1;
               state.cells[cell] = state.players.player1;
-              block.innerHTML = `<img src="${state.players.player1}" alt="X">`;
+              block.innerHTML = state.players.player1;
               if (checkWinner(player1)) {
                 setScore(state.score, 'player1Score', scoreMe);
                 state.gameOver = true;
@@ -117,11 +142,11 @@ export function chooseGameBlock () {
                 // showOverlay('tie');
               }
               state.turn = state.players.player2;
-              whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+              whosTurn.innerHTML = state.turn;
             } else {
               const player2 = state.players.player2;
               state.cells[cell] = state.players.player2;
-              block.innerHTML = `<img src="${state.players.player2}" alt="X">`;
+              block.innerHTML = state.players.player2;
               if (checkWinner(player2)) {
                 setScore (state.score, 'player2Score', scorePlayer);
                 state.gameOver = true;
@@ -132,7 +157,7 @@ export function chooseGameBlock () {
                 setTimeout(() => showOverlay('tie'), 1000);
               }
               state.turn = state.players.player1;
-              whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+              whosTurn.innerHTML = state.turn;
             }
           } else {
             return;
@@ -189,7 +214,6 @@ function showOverlay(position, player) {
 
   //viens aktīvais režīms
   if(position === 'win') {
-    takesTheRound.textContent = 'takes the round';
     greyBtn.textContent = 'quit';
     greyBtn.dataset.action = 'quit';
     yellowBtn.textContent = 'next round';
@@ -197,8 +221,10 @@ function showOverlay(position, player) {
 
     if (state.players.player1 === player) {
       whoWon.textContent = 'You won!';
+      takesTheRound.innerHTML = `${player} takes the round`;
     } else {
       whoWon.textContent = 'Oh no, you lost...';
+      takesTheRound.innerHTML = `${state.players.player2} takes the round`;
     }
   } else if(position === 'tie') {
     whoWon.hidden = true;
@@ -264,11 +290,11 @@ export function nextRound() {
     Object.assign(state.cells, newState.cells);
     state.gameOver = false;
 
-    state.turn = state.players.player1 === './assets/icon-x.svg'
+    state.turn = state.players.player1 === ICON_X
     ? state.players.player1
     : state.players.player2;
 
-    whosTurn.innerHTML = `<img src="${state.turn}">`;
+    whosTurn.innerHTML = state.turn;
 
     gameBlock.forEach((block, i) => {
     block.innerHTML = newState.cells[i];
@@ -298,7 +324,7 @@ const gameBlock = document.querySelectorAll('.game-board-block');
   const newState = structuredClone(initialState);
   Object.assign(state.cells, newState.cells);
     state.turn = initialState.turn;
-    whosTurn.innerHTML = `<img src="${state.turn}">`;
+    whosTurn.innerHTML = state.turn;
     gameBlock.forEach((block, i) => {
       block.innerHTML = newState.cells[i];
     });
@@ -384,7 +410,7 @@ function cpuMoveHandler() {
 
   const player2 = state.players.player2;
   state.cells[cpuCell] = player2;
-  gameBlock[cpuCell].innerHTML = `<img src="${player2}" alt="X">`;
+  gameBlock[cpuCell].innerHTML = player2;
   
   if (checkWinner(player2)) {
     setScore (state.score, 'player2Score', scorePlayer);
@@ -401,5 +427,5 @@ function cpuMoveHandler() {
   }
 
   state.turn = state.players.player1;
-  whosTurn.innerHTML = `<img src="${state.turn}" alt="${state.turn}">`;
+  whosTurn.innerHTML = state.turn;
 }

@@ -416,22 +416,70 @@ select {
 }
 
 .game-board-header {
-  flex-direction: row;
-  justify-content: space-between;
+  padding-block-end: 4.5rem;
 }
 
 .game-board {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1.5rem;
+  column-gap: 1.25rem;
+  row-gap: 1.8rem;
+}
+
+.logo-icons {
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .game-board-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 1/0.9;
   border-radius: 10px;
   background-color: hsl(var(--clr-light-green));
+  box-shadow: 0 8px 1px hsl(199, 69%, 9%);
+}
 
+.game-board-block .icon-x {
+  fill: hsl(var(--clr-dark-blue));
+  width: 40px;
+  height: 40px;
+}
+
+.game-board-block .icon-o {
+  fill: hsl(var(--clr-dark-yellow));
+  width: 40px;
+  height: 40px;
+}
+
+.score-section {
+  padding-block-start: 2rem;
+}
+
+.whos-turn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.whos-turn svg {
+  fill: hsl(var(--clr-dark-grey));
+  width: 16px;
+  height: 16px;
+}
+
+.players-turn {
+  background-color: hsl(var(--clr-light-green));
+  border-radius: 6px;
+  padding: .5rem;
+  justify-content: space-evenly;
+  align-items: center;
+  box-shadow: 0 5px 1px hsl(199, 69%, 9%);
+  gap: 0;
 }
 
 .game-board-footer {

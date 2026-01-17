@@ -1,10 +1,12 @@
+import { ICON_X, ICON_O } from './icons.js';
+
 export const initialState = {
   players: {
-    player1: './assets/icon-x.svg', //ieliec saiti
-    player2: './assets/icon-o.svg',
+    player1: ICON_X, //ieliec saiti
+    player2: ICON_O,
   },
   gameMode: '',
-  turn: './assets/icon-x.svg',
+  turn: ICON_X,
   cells: ['', '', '', '', '', '', '', '', ''],
   gameOver: false,
   score: {
