@@ -396,6 +396,7 @@ select {
   align-items: center;
   transition: background-color 300ms ease;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mark-container > [aria-selected="false"]:hover {
@@ -480,14 +481,14 @@ select {
 
 .game-board-block .icon-x {
   fill: hsl(var(--clr-dark-blue));
-  width: 64px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
 }
 
 .game-board-block .icon-o {
   fill: hsl(var(--clr-dark-yellow));
-  width: 66px;
-  height: 66px;
+  width: 46px;
+  height: 46px;
 }
 
 .score-section {
@@ -578,14 +579,14 @@ select {
 
 .takes-round-msg .icon-x {
   fill: hsl(var(--clr-dark-blue));
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
 }
 
 .takes-round-msg .icon-o {
   fill: hsl(var(--clr-dark-yellow));
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
 }
 
 .quit-btn {
@@ -594,13 +595,36 @@ select {
   font-weight: var(--fw-700);
   font-size: var(--fs-xsmall);
   padding-inline: 1rem;
-  padding-block: 0.75rem;
+  padding-block: .75rem;
   border-radius: 6px;
   border: none;
   box-shadow: 0 4px 1px hsl(198, 23%, 48%);
   cursor: pointer;
   transition: background-color 300ms ease;
 }
+
+.quit-btn:hover {
+  background-color: hsl(var(--clr-light-grey));
+}
+
+.next-round-btn {
+  background-color: hsl(var(--clr-dark-yellow));
+  padding-inline: 1rem;
+  padding-block: .75rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  color: hsl( var(--clr-dark-green));
+  width: 100%;
+  box-shadow: 0 4px 1px hsl(39, 88%, 43%);
+  cursor: pointer;
+  transition: background-color 300ms ease;
+}
+
+.next-round-btn:hover {
+  background-color: hsl(var(--clr-light-yellow));
+}
+
 
 @media (min-width: 27rem) {
   body {
@@ -619,6 +643,58 @@ select {
 
   .players-turn p {
     font-weight: var(--fw-700);
+  }
+
+  .game-board-block .icon-x {
+    fill: hsl(var(--clr-dark-blue));
+    width: 64px;
+    height: 64px;
+  }
+
+  .game-board-block .icon-o {
+    fill: hsl(var(--clr-dark-yellow));
+    width: 66px;
+    height: 66px;
+  }
+
+  .overlay {
+    padding-block: 3.25rem;
+  }
+
+  .who-won-info {
+    font-weight: var(--fw-700);
+  }
+}
+
+@media (min-width: 35rem) {
+  body {
+    display: grid;
+    place-items: center;
+  }
+
+  .new-game-menu,
+  .game-board-section {
+    width: 500px;
+  }
+
+  .game-board-header {
+    padding-block-end: 1.8rem;
+  }
+
+  .players-turn p {
+    font-weight: var(--fw-700);
+  }
+
+  .game-board-block .icon-x {
+    fill: hsl(var(--clr-dark-blue));
+    width: 64px;
+    height: 64px;
+  }
+
+  .game-board-block .icon-o {
+    fill: hsl(var(--clr-dark-yellow));
+    width: 66px;
+    height: 66px;
   }
 
   .overlay {
