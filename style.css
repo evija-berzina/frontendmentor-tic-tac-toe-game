@@ -208,8 +208,8 @@ select {
   background-color: hsl(var(--clr-light-green));
 }
 
-.text-dark {
-  color: hsl( var(--clr-dark) );
+.text-dark-yellow {
+  color: hsl(var(--clr-dark-yellow));
 }
 
 /* typography */
@@ -396,6 +396,12 @@ select {
   padding-block: .75rem;
   justify-content: center;
   align-items: center;
+  transition: background-color 300ms ease;
+  cursor: pointer;
+}
+
+.mark-container > [aria-selected="false"]:hover {
+  background-color: hsl(var(--clr-light-green));
 }
 
 .mark-container > [aria-selected="true"] .mark-icon {
@@ -437,11 +443,40 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   width: 100%;
   aspect-ratio: 1/0.9;
   border-radius: 10px;
   background-color: hsl(var(--clr-light-green));
   box-shadow: 0 8px 1px hsl(199, 69%, 9%);
+}
+
+.game-board-block::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.game-board-blocks.x-turn .game-board-block:hover::before {
+  content: '';
+  background-image: url('./assets/icon-x-outline.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 1;
+}
+
+.game-board-blocks.o-turn .game-board-block:hover::before {
+  content: '';
+  background-image: url('./assets/icon-o-outline.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 1;
+}
+
+.game-board-block.filled::before {
+  display: none;
 }
 
 .game-board-block .icon-x {
@@ -526,9 +561,32 @@ select {
 }
 
 .takes-round-msg {
-  color: hsl(var(--clr-dark-yellow));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
   font-size: var(--fs-medium);
   font-weight: var(--fw-700);
+}
+
+.takes-round-msg.x-turn {
+  color: hsl(var(--clr-dark-blue));;
+}
+
+.takes-round-msg.o-turn {
+  color: hsl(var(--clr-dark-yellow));;
+}
+
+.takes-round-msg .icon-x {
+  fill: hsl(var(--clr-dark-blue));
+  width: 40px;
+  height: 40px;
+}
+
+.takes-round-msg .icon-o {
+  fill: hsl(var(--clr-dark-yellow));
+  width: 40px;
+  height: 40px;
 }
 
 .quit-btn {
@@ -543,4 +601,17 @@ select {
   box-shadow: 0 4px 1px hsl(198, 23%, 48%);
   cursor: pointer;
   transition: background-color 300ms ease;
+}
+
+@media (min-width: 48rem) {
+  body {
+    display: grid;
+    place-items: center;
+  }
+
+  .new-game-menu,
+  .game-board-section {
+    width: 500px;
+  }
+
 }

@@ -38,6 +38,7 @@ export function setupGameMode () {
   const newGameBtn = document.querySelectorAll('.new-game-btn');
   const newGameMenu = document.querySelector('.new-game-js');
   const gameBoard = document.querySelector('.game-board-js');
+  const gameBoardBlocks = document.querySelector('.game-board-blocks');
   const whosTurn = document.querySelector('.whos-turn');
   const playerX = document.querySelector('.player-x');
   const playerO = document.querySelector('.player-o');
@@ -50,9 +51,10 @@ export function setupGameMode () {
       gameBoard.hidden = false;
 
       if(state.gameMode === 'cpu' && state.turn === state.players.player2) {
-        setTimeout(cpuMoveHandler, 1000);
+        setTimeout(cpuMoveHandler, updateTurnClass, 1000);
       }
 
+      updateTurnClass();
       whosTurn.innerHTML = state.turn;
 
       if(state.gameMode === 'cpu') {
@@ -79,6 +81,7 @@ export function setupGameMode () {
 // spēles cikla sākums
 export function chooseGameBlock () {
   const gameBoardSection = document.querySelector('.game-board-section');
+  const gameBoardBlocks = document.querySelector('.game-board-blocks');
   const gameBoard = document.querySelectorAll('.game-board');
   const gameBlock = document.querySelectorAll('.game-board-block');
   const whosTurn = document.querySelector('.whos-turn');
@@ -90,15 +93,17 @@ export function chooseGameBlock () {
   scorePlayer.textContent = state.score.player2Score;
   scoreTie.textContent = state.score.ties; 
 
+  
+
   gameBlock.forEach(block => {
     let cell = parseFloat(block.dataset.cell);
-    
     block.addEventListener('click', () => {
       if (state.gameMode === 'cpu') {
         if (state.cells[cell] !== '' || state.gameOver) return;
-
+        
         state.cells[cell] = state.players.player1;
         block.innerHTML = state.players.player1;
+        block.classList.add('filled');
 
         if (checkWinner(state.players.player1)) {
           setScore(state.score, 'player1Score', scoreMe);
@@ -116,6 +121,7 @@ export function chooseGameBlock () {
 
         state.turn = state.players.player2;
         whosTurn.innerHTML = state.turn;
+        updateTurnClass();
 
         if(state.gameMode === 'cpu') {
           setTimeout(cpuMoveHandler, 500);
@@ -130,6 +136,7 @@ export function chooseGameBlock () {
               const player1 = state.players.player1;
               state.cells[cell] = state.players.player1;
               block.innerHTML = state.players.player1;
+              block.classList.add('filled');
               if (checkWinner(player1)) {
                 setScore(state.score, 'player1Score', scoreMe);
                 state.gameOver = true;
@@ -143,10 +150,12 @@ export function chooseGameBlock () {
               }
               state.turn = state.players.player2;
               whosTurn.innerHTML = state.turn;
+              updateTurnClass();
             } else {
               const player2 = state.players.player2;
               state.cells[cell] = state.players.player2;
               block.innerHTML = state.players.player2;
+              block.classList.add('filled');
               if (checkWinner(player2)) {
                 setScore (state.score, 'player2Score', scorePlayer);
                 state.gameOver = true;
@@ -158,6 +167,7 @@ export function chooseGameBlock () {
               }
               state.turn = state.players.player1;
               whosTurn.innerHTML = state.turn;
+              updateTurnClass();
             }
           } else {
             return;
@@ -212,6 +222,8 @@ function showOverlay(position, player) {
   greyBtn.textContent = '';
   yellowBtn.textContent = '';
 
+  takesTheRound.classList.remove('x-turn', 'o-turn');
+
   //viens aktīvais režīms
   if(position === 'win') {
     greyBtn.textContent = 'quit';
@@ -219,17 +231,24 @@ function showOverlay(position, player) {
     yellowBtn.textContent = 'next round';
     yellowBtn.dataset.action = 'nextRound';
 
-    if (state.players.player1 === player) {
+    const winner = player;
+
+    takesTheRound.innerHTML = `${winner} takes the round`;
+    takesTheRound.classList.remove('x-turn', 'o-turn');
+    takesTheRound.classList.add(
+      winner === ICON_X ? 'x-turn' : 'o-turn'
+    );
+
+    if (state.players.player1 === winner) {
       whoWon.textContent = 'You won!';
-      takesTheRound.innerHTML = `${player} takes the round`;
     } else {
       whoWon.textContent = 'Oh no, you lost...';
-      takesTheRound.innerHTML = `${state.players.player2} takes the round`;
     }
   } else if(position === 'tie') {
     whoWon.hidden = true;
     takesTheRound.textContent = 'Round tied';
     greyBtn.textContent = 'quit';
+    greyBtn.dataset.action = 'quit';
     yellowBtn.textContent = 'next round';
     yellowBtn.dataset.action = 'nextRound';
   } else if(position === 'reset') {
@@ -265,6 +284,7 @@ function resetState() {
 
 function resetBoardUI() {
   const gameBlock = document.querySelectorAll('.game-board-block');
+  const gameBoardBlocks = document.querySelector('.game-board-blocks');
   const whosTurn = document.querySelector('.whos-turn');
   const scoreMe = document.querySelector('.score-me');
     const scorePlayer = document.querySelector('.score-player');
@@ -272,9 +292,12 @@ function resetBoardUI() {
 
 
   whosTurn.innerHTML = state.turn;
+  updateTurnClass();
   gameBlock.forEach((block, i) => {
     block.innerHTML = state.cells[i];
+    block.classList.remove('filled');
   });
+  gameBoardBlocks.classList.remove('x-turn', 'o-turn');
   scoreMe.innerHTML = state.score.player1Score;
   scorePlayer.innerHTML = state.score.player2Score;
   scoreTie.innerHTML = state.score.ties;
@@ -295,9 +318,11 @@ export function nextRound() {
     : state.players.player2;
 
     whosTurn.innerHTML = state.turn;
+    updateTurnClass();
 
     gameBlock.forEach((block, i) => {
     block.innerHTML = newState.cells[i];
+    block.classList.remove('filled');
   });
 
     overlaySection.hidden = true;
@@ -325,8 +350,10 @@ const gameBlock = document.querySelectorAll('.game-board-block');
   Object.assign(state.cells, newState.cells);
     state.turn = initialState.turn;
     whosTurn.innerHTML = state.turn;
+    updateTurnClass();
     gameBlock.forEach((block, i) => {
       block.innerHTML = newState.cells[i];
+      block.classList.remove('filled');
     });
     overlaySection.hidden = true;
 }
@@ -411,6 +438,7 @@ function cpuMoveHandler() {
   const player2 = state.players.player2;
   state.cells[cpuCell] = player2;
   gameBlock[cpuCell].innerHTML = player2;
+  gameBlock[cpuCell].classList.add('filled');
   
   if (checkWinner(player2)) {
     setScore (state.score, 'player2Score', scorePlayer);
@@ -428,4 +456,17 @@ function cpuMoveHandler() {
 
   state.turn = state.players.player1;
   whosTurn.innerHTML = state.turn;
+  updateTurnClass();
+}
+
+function updateTurnClass() {
+  const board = document.querySelector('.game-board-blocks');
+
+  board.classList.remove('x-turn', 'o-turn');
+
+  if (state.turn === ICON_X) {
+    board.classList.add('x-turn');
+  } else {
+    board.classList.add('o-turn');
+  }
 }
