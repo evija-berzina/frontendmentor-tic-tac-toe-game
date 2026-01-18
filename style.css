@@ -342,8 +342,8 @@ select {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-inline: 1.5rem;
-  padding-block: 4rem;
+  padding-inline: 3rem;
+  padding-block: 5rem;
   width: 100%;
 }
 
@@ -403,6 +403,11 @@ select {
   background-color: hsl(var(--clr-light-green));
 }
 
+.mark-btn:active {
+  transform: scale(0.97);
+  transition: transform 100ms ease;
+}
+
 .mark-container > [aria-selected="true"] .mark-icon {
   fill: hsl(var(--clr-dark-green));
   width: 32px;
@@ -417,7 +422,7 @@ select {
 
 .game-board-section {
   position: relative;
-  padding: 2rem;
+  padding: 3rem;
   width: 100%;
 }
 
@@ -591,13 +596,13 @@ select {
 
 .quit-btn {
   background-color: hsl(var(--clr-dark-grey));
-  color: hsl(var(--clr-light-green));
+  color: hsl(var(--clr-dark-green));
   font-weight: var(--fw-700);
-  font-size: var(--fs-xsmall);
   padding-inline: 1rem;
   padding-block: .75rem;
   border-radius: 6px;
   border: none;
+  text-wrap: nowrap;
   box-shadow: 0 4px 1px hsl(198, 23%, 48%);
   cursor: pointer;
   transition: background-color 300ms ease;
