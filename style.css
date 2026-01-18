@@ -92,10 +92,7 @@ body {
   line-height: 1.5;
   text-transform: uppercase;
   letter-spacing: 1px;
-  /* min-height: 100vh;
-
-  display: grid;
-  grid-template-rows: 1fr; */
+  min-height: 100vh;
 }
 
 /* make images easier to work with */
@@ -343,10 +340,11 @@ select {
 
 .new-game-menu {
   flex-direction: column;
-  padding-inline: 1.5rem;
-  padding-block: 6rem;
   align-items: center;
   justify-content: center;
+  padding-inline: 1.5rem;
+  padding-block: 4rem;
+  width: 100%;
 }
 
 .logo-icon-x {
@@ -417,8 +415,9 @@ select {
 }
 
 .game-board-section {
-  padding: 1.5rem 1.5rem 9rem 1.5rem;
   position: relative;
+  padding: 2rem;
+  width: 100%;
 }
 
 .game-board-header {
@@ -481,14 +480,14 @@ select {
 
 .game-board-block .icon-x {
   fill: hsl(var(--clr-dark-blue));
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
 }
 
 .game-board-block .icon-o {
   fill: hsl(var(--clr-dark-yellow));
-  width: 40px;
-  height: 40px;
+  width: 66px;
+  height: 66px;
 }
 
 .score-section {
@@ -603,7 +602,7 @@ select {
   transition: background-color 300ms ease;
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 27rem) {
   body {
     display: grid;
     place-items: center;
@@ -614,4 +613,34 @@ select {
     width: 500px;
   }
 
+  .game-board-header {
+    padding-block-end: 1.8rem;
+  }
+
+  .players-turn p {
+    font-weight: var(--fw-700);
+  }
+
+  .overlay {
+    padding-block: 3.25rem;
+  }
+
+  .who-won-info {
+    font-weight: var(--fw-700);
+  }
+
+  .takes-round-msg {
+    font-size: var(--fs-large);
+  }
+
+  .takes-round-msg .icon-x {
+    width: 60px;
+    height: 60px;
+  }
+
+  .takes-round-msg .icon-o {
+    width: 60px;
+    height: 60px;
+  }
 }
+
